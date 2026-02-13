@@ -27,11 +27,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/peminjaman', [AdminController::class, 'peminjaman']);
     Route::post('/peminjaman', [AdminController::class, 'storePeminjaman']);
     Route::get('/peminjaman/{id}/kembali', [AdminController::class, 'kembalikan']);
+    Route::get('/peminjaman/export-excel', [AdminController::class, 'exportExcel']);
+    Route::get('/peminjaman/export-pdf', [AdminController::class, 'exportPdf']);
+
 
     // CRUD Siswa
     Route::get('/siswa', [AdminController::class, 'siswa']);
     Route::post('/siswa', [AdminController::class, 'storeSiswa']);
-    Route::get('/siswa/{id}/hapus', [AdminController::class, 'deleteSiswa']);
+        
     Route::get('/siswa/{id}/edit', [AdminController::class, 'editSiswa']);
     Route::post('/siswa/{id}/update', [AdminController::class, 'updateSiswa']);
     Route::get('/siswa/{id}', [AdminController::class, 'detailSiswa']);

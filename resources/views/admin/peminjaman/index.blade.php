@@ -57,21 +57,26 @@
         </form>
 
         <form method="GET" action="/peminjaman" class="row mb-3">
-        <div class="col-md-4">
-            <select name="status" class="form-control">
-                <option value="">Semua Status</option>
-                <option value="dipinjam" {{ request('status') == 'dipinjam' ? 'selected' : '' }}>
-                    Dipinjam
-                </option>
-                <option value="dikembalikan" {{ request('status') == 'dikembalikan' ? 'selected' : '' }}>
-                    Dikembalikan
-                </option>
-            </select>
+            <div class="col-md-4">
+                <select name="status" class="form-control">
+                    <option value="">Semua Status</option>
+                    <option value="dipinjam" {{ request('status') == 'dipinjam' ? 'selected' : '' }}>
+                        Dipinjam
+                    </option>
+                    <option value="dikembalikan" {{ request('status') == 'dikembalikan' ? 'selected' : '' }}>
+                        Dikembalikan
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-secondary w-100">Filter</button>
+            </div>
+        </form>
+
+        <div class="mb-3">
+        <a href="/peminjaman/export-excel" class="btn btn-success">Export Excel</a>
+        <a href="/peminjaman/export-pdf" class="btn btn-danger">Export PDF</a>
         </div>
-        <div class="col-md-2">
-            <button class="btn btn-secondary w-100">Filter</button>
-        </div>
-    </form>
 
 
         <table class="table table-bordered">

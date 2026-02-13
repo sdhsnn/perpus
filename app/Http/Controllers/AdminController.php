@@ -6,6 +6,9 @@ use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use App\Exports\PeminjamanExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -153,6 +156,21 @@ class AdminController extends Controller
    
         return redirect()->back()->with('success', 'Buku berhasil dikembalikan');
     }
+
+    public function exportExcel()
+    {
+        return Excel::download(new PeminjamanExport, 'peminjaman.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $data = Peminjaman::with(['siswa','buku'])->get();
+
+        $pdf = Pdf::loadView('admin.peminjaman.pdf', compact('data'));
+
+        return $pdf->download('peminjaman.pdf');
+    }
+
 
     /* ======================
        CRUD Siswa
