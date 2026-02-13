@@ -109,6 +109,7 @@
         </div>
 
         <div class="card-body p-0">
+        <div class="table-responsive">
             <table class="table table-bordered table-hover mb-0 align-middle">
                 <tr class="table-light text-center">
                     <th width="60">No</th>
@@ -126,7 +127,6 @@
                     <td>{{ $p->siswa->nama }}</td>
                     <td>{{ $p->buku->judul }}</td>
                     <td>{{ $p->tanggal_pinjam }}</td>
-
                     <td>
                         @if ($p->tanggal_kembali)
                             {{ $p->tanggal_kembali }}
@@ -134,7 +134,6 @@
                             <span class="text-muted">-</span>
                         @endif
                     </td>
-
                     <td class="text-center">
                         @if ($p->status == 'dipinjam')
                             <span class="badge bg-warning text-dark">Dipinjam</span>
@@ -142,12 +141,11 @@
                             <span class="badge bg-success">Dikembalikan</span>
                         @endif
                     </td>
-
                     <td class="text-center">
                         @if ($p->status == 'dipinjam')
                             <a href="/peminjaman/{{ $p->id }}/kembali"
-                               class="btn btn-success btn-sm"
-                               onclick="return confirm('Kembalikan buku ini?')">
+                            class="btn btn-success btn-sm"
+                            onclick="return confirm('Kembalikan buku ini?')">
                                 <i class="bi bi-check-circle"></i>
                             </a>
                         @else
@@ -159,6 +157,8 @@
 
             </table>
         </div>
+    </div>
+
     </div>
 
 </div>
