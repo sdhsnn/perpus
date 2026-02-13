@@ -13,29 +13,83 @@
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
+
 <style>
     .pagination .page-link {
         padding: 4px 8px;
         font-size: 14px;
     }
+
+    /* ===== Tema Biru Muda Lembut ===== */
+    body {
+        background-color: #e3f2fd; /* ubah dari #f4f8ff ke biru muda */
+    }
+
+    .navbar {
+        background: linear-gradient(90deg, #0d6efd, #3b82f6) !important;
+    }
+
+    .navbar .nav-link,
+    .navbar .navbar-brand {
+        color: white !important;
+        font-weight: 500;
+    }
+
+    .navbar .nav-link:hover {
+        opacity: 0.8;
+    }
+
+    .card {
+        border: none;
+        border-radius: 12px;
+    }
+
+    .card-stat {
+        background: white;
+        border-left: 5px solid #0d6efd;
+    }
+
+    .list-group-item {
+        border: none;
+        border-radius: 10px !important;
+        margin-bottom: 8px;
+        background-color: white;
+        transition: 0.2s;
+    }
+
+    .list-group-item:hover {
+        background-color: #e7f0ff;
+        transform: translateX(4px);
+    }
 </style>
+
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-light shadow-sm">
             <div class="container">
+
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarSupportedContent">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+
+                    <!-- Kosongkan kiri -->
+                    <ul class="navbar-nav me-auto"></ul>
+
+                    <!-- Semua menu di kanan -->
+                    <ul class="navbar-nav ms-auto">
+
                         @auth
                         <li class="nav-item">
                             <a class="nav-link" href="/dashboard">Dashboard</a>
@@ -51,42 +105,40 @@
                         </li>
                         @endauth
 
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">Login</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">Register</a>
                                 </li>
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#"
+                                   data-bs-toggle="dropdown">
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-end">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                       document.getElementById('logout-form').submit();">
+                                        Logout
                                     </a>
 
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    <form id="logout-form" action="{{ route('logout') }}"
+                                          method="POST" class="d-none">
                                         @csrf
                                     </form>
                                 </div>
                             </li>
                         @endguest
+
                     </ul>
                 </div>
             </div>

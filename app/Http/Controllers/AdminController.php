@@ -35,7 +35,7 @@ class AdminController extends Controller
     // Tampilkan data buku
     public function buku()
     {
-        $buku = Buku::paginate(5);
+        $buku = Buku::latest()->paginate(5);
 
         return view('admin.buku.index', compact('buku'));
     }
@@ -104,7 +104,7 @@ class AdminController extends Controller
             );
         }
 
-        $data = $query->get();
+        $data = $query->orderBy('created_at', 'desc')->get();
 
         if ($data->isEmpty()) {
             session()->flash('warning', 'Data peminjaman tidak ditemukan');
@@ -179,7 +179,7 @@ class AdminController extends Controller
     // Tampilkan data siswa
     public function siswa()
     {
-        $siswa = Siswa::paginate(5);
+        $siswa = Siswa::latest()->paginate(5);
 
         return view('admin.siswa.index', compact('siswa'));
     }
@@ -209,8 +209,8 @@ class AdminController extends Controller
     public function updateSiswa(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required',
-            'kelas' => 'required|integer|min:0',
+            'nama' => 'required|string',
+            'kelas' => 'required|string',
         ]);
 
         $siswa = Siswa::findOrFail($id);

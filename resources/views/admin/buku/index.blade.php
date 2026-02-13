@@ -1,67 +1,97 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h3>Data Buku</h3>
+<div class="container">
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul class="mb-0">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    <h3 class="mb-4 fw-bold text-primary">Data Buku</h3>
 
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+    @if ($errors->any())
+        <div class="alert alert-danger shadow-sm">
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
+    @if (session('success'))
+        <div class="alert alert-success shadow-sm">
+            {{ session('success') }}
+        </div>
+    @endif
 
 
-        <form action="/buku" method="POST" class="row mb-4">
-            @csrf
-            <div class="col-md-6">
-                <input type="text" name="judul" class="form-control" placeholder="Judul Buku">
-            </div>
-            <div class="col-md-3">
-                <input type="number" name="stok" class="form-control" placeholder="Stok">
-            </div>
-            <div class="col-md-3">
-                <button class="btn btn-success w-100">Simpan</button>
-            </div>
-        </form>
+    {{-- FORM TAMBAH --}}
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-primary text-white fw-semibold">
+            Tambah Buku
+        </div>
 
-        <table class="table table-bordered">
-            <tr>
-                <th>No</th>
-                <th>Judul</th>
-                <th>Stok</th>
-                <th>Aksi</th>
-            </tr>
-            @foreach ($buku as $item)
-                <tr>
-                    <td>{{ $buku->firstItem() + $loop->index }}</td>
-                    <td>{{ $item->judul }}</td>
-                    <td>{{ $item->stok }}</td>
-                    <td>
-                        <a href="/buku/{{ $item->id }}/edit" class="btn btn-warning btn-sm">
-                            Edit
-                        </a>
+        <div class="card-body">
+            <form action="/buku" method="POST" class="row g-3">
+                @csrf
 
-                        <a href="/buku/{{ $item->id }}/hapus" class="btn btn-danger btn-sm"
-                            onclick="return confirm('Hapus buku?')">
-                            Hapus
-                        </a>
-                    </td>
-                </tr>
-            @endforeach
-        </table>
+                <div class="col-md-6">
+                    <input type="text" name="judul" class="form-control" placeholder="Judul Buku">
+                </div>
 
-        <div class="d-flex justify-content-center mt-3">
-            {{ $buku->links() }}
+                <div class="col-md-3">
+                    <input type="number" name="stok" class="form-control" placeholder="Stok">
+                </div>
+
+                <div class="col-md-3">
+                    <button class="btn btn-success w-100">
+                        <i class="bi bi-save me-1"></i> Simpan
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+
+
+    {{-- TABEL --}}
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-primary text-white fw-semibold">
+            Daftar Buku
+        </div>
+
+        <div class="card-body p-0">
+            <table class="table table-bordered table-hover mb-0 align-middle">
+                <tr class="table-light text-center">
+                    <th width="60">No</th>
+                    <th>Judul</th>
+                    <th>Stok</th>
+                    <th width="180">Aksi</th>
+                </tr>
+
+                @foreach ($buku as $item)
+                <tr>
+                    <td class="text-center">{{ $buku->firstItem() + $loop->index }}</td>
+                    <td>{{ $item->judul }}</td>
+                    <td class="text-center">{{ $item->stok }}</td>
+                    <td class="text-center">
+
+                        <a href="/buku/{{ $item->id }}/edit" class="btn btn-warning btn-sm">
+                            <i class="bi bi-pencil-square"></i>
+                        </a>
+
+                        <a href="/buku/{{ $item->id }}/hapus"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Hapus buku?')">
+                            <i class="bi bi-trash"></i>
+                        </a>
+
+                    </td>
+                </tr>
+                @endforeach
+            </table>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3">
+        {{ $buku->links() }}
+    </div>
+
+</div>
 @endsection
