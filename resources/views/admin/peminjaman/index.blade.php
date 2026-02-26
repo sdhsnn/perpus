@@ -85,19 +85,45 @@
                         <i class="bi bi-funnel me-1"></i> Filter
                     </button>
                 </div>
+
+                {{-- TAMBAHAN FILTER BULAN --}}
+                <div class="col-md-3">
+                    <label class="form-label">Filter Bulan</label>
+                    <input type="month" name="bulan" class="form-control"
+                        value="{{ request('bulan') }}">
+                </div>
+
+                <div class="col-md-2">
+                    <button class="btn btn-secondary w-100">
+                        <i class="bi bi-funnel me-1"></i> Filter
+                    </button>
+                </div>
             </form>
         </div>
     </div>
 
+    @if(request('bulan'))
+    <div class="alert alert-info shadow-sm">
+        Total Peminjaman Bulan Ini:
+        <strong>{{ $totalPeminjaman }}</strong> transaksi
+    </div>
+    @endif
 
     {{-- Export --}}
     <div class="mb-3">
-        <a href="/peminjaman/export-excel" class="btn btn-success me-2">
-            <i class="bi bi-file-earmark-excel me-1"></i> Export Excel
+        <a href="{{ route('export.peminjaman', request()->only('status','bulan')) }}" 
+        class="btn btn-success">
+            Export Excel
         </a>
 
-        <a href="/peminjaman/export-pdf" class="btn btn-danger">
-            <i class="bi bi-file-earmark-pdf me-1"></i> Export PDF
+        <a href="{{ route('export.pdf', request()->only('status','bulan')) }}" 
+        class="btn btn-danger">
+            Export PDF
+        </a>
+
+        <a href="{{ route('peminjaman.print', request()->query()) }}"
+        class="btn btn-primary">
+        <i class="bi bi-printer"></i> Cetak
         </a>
     </div>
 

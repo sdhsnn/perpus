@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Exports\PeminjamanExport;
 use Maatwebsite\Excel\Facades\Excel;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -104,13 +105,22 @@ class AdminController extends Controller
             );
         }
 
+        if ($request->bulan) {
+        $bulan = explode('-', $request->bulan);
+
+        $query->whereYear('tanggal_pinjam', $bulan[0])
+              ->whereMonth('tanggal_pinjam', $bulan[1]);
+        }
+
         $data = $query->orderBy('created_at', 'desc')->get();
+
+        $totalPeminjaman = $data->count();
 
         if ($data->isEmpty()) {
             session()->flash('warning', 'Data peminjaman tidak ditemukan');
         }
 
-        return view('admin.peminjaman.index', compact('siswa', 'buku', 'data'));
+        return view('admin.peminjaman.index', compact('siswa', 'buku', 'data', 'totalPeminjaman'));
     }
 
     public function storePeminjaman(Request $request)
@@ -157,18 +167,71 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Buku berhasil dikembalikan');
     }
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new PeminjamanExport, 'peminjaman.xlsx');
+        return Excel::download(
+            new PeminjamanExport(
+                $request->status,
+                $request->bulan
+            ),
+            'laporan_peminjaman.xlsx'
+        );
     }
 
-    public function exportPdf()
+    public function exportPdf(Request $request)
     {
-        $data = Peminjaman::with(['siswa','buku'])->get();
+        $query = Peminjaman::with(['siswa','buku']);
+
+        // FILTER STATUS
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        // FILTER BULAN
+        if ($request->bulan) {
+            $bulan = explode('-', $request->bulan);
+
+            $query->whereYear('tanggal_pinjam', $bulan[0])
+                ->whereMonth('tanggal_pinjam', $bulan[1]);
+        }
+
+        $data = $query->orderBy('created_at','desc')->get();
 
         $pdf = Pdf::loadView('admin.peminjaman.pdf', compact('data'));
 
         return $pdf->download('peminjaman.pdf');
+    }
+
+    public function print(Request $request)
+    {
+        $query = Peminjaman::with(['siswa','buku']);
+
+        // FILTER STATUS
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        $judul = "Data Peminjaman Buku";
+
+        // FILTER BULAN FORMAT YYYY-MM
+        if ($request->bulan) {
+
+            // Pecah 2026-02
+            [$tahun, $bulan] = explode('-', $request->bulan);
+
+            $query->whereYear('tanggal_pinjam', $tahun)
+                ->whereMonth('tanggal_pinjam', $bulan);
+
+            $namaBulan = Carbon::create()
+                            ->month((int)$bulan)
+                            ->translatedFormat('F');
+
+            $judul = "Laporan Peminjaman Buku";
+        }
+
+        $data = $query->get();
+
+        return view('admin.peminjaman.print', compact('data','judul'));
     }
 
 
